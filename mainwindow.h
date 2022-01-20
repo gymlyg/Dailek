@@ -17,6 +17,8 @@ public:
     ~MainWindow();
     bool init();
 
+public slots:
+    void on_pushButton_addNew_clicked();
 private:
     Ui::MainWindow *ui;
     DbManager m_dbManager;

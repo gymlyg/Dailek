@@ -1,5 +1,4 @@
 #include "dbmanager.h"
-#include <QStringList>
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
@@ -49,15 +48,7 @@ bool DbManager::init_db()
 bool DbManager::createDbStructure()
 {
     bool r = true;
-    qDebug() << "createTable tracks: " << createTable("tracks",
-                    {
-                        "id integer primary key AUTOINCREMENT",
-                        "date_current_day varchar(16)",
-                        "time_start varchar(16)",
-                        "time_end varchar(16)",
-                        "task_target varchar(64)",
-                        "task_desc varchar(128)"
-                     });
+    qDebug() << "createTable tracks: " << createTable("tracks", m_slTracksFields);
     return r;
 }
 
@@ -66,6 +57,25 @@ bool DbManager::createTable(const QString tableName, const QStringList &fieldsDa
     QSqlQuery query;
     QString qStr = "CREATE TABLE IF NOT EXISTS %1(%2)";
     qStr = qStr.arg(tableName).arg(fieldsData.join(","));
+    qDebug() << "query: " << qStr;
+    bool r = query.exec(qStr);
+    if(!r) {
+        QSqlError err = query.lastError();
+        qDebug() << "creating table error: " << err.text();
+    }
+    return r;
+}
+
+bool DbManager::createRecord(const QString tableName, const QStringList &fieldsData, const QStringList &values)
+{
+    QSqlQuery query;
+    QString qStr = "INSERT INTO %1 (%2) VALUES (%3)";
+
+    QStringList qData = prepareValues(fieldsData, values);
+
+    qStr = qStr.arg(tableName)
+            .arg(qData[PREP_FIELD_NAMES])
+            .arg(qData[PREP_VALUES]);
     qDebug() << "query: " << qStr;
     bool r = query.exec(qStr);
     if(!r) {
@@ -91,3 +101,32 @@ bool DbManager::createDirPath(QString dirPath)
     return true;
 }
 
+bool DbManager::createDayRecord()
+{
+    return createRecord("tracks", m_slTracksFields,
+                {
+                    "NULL",
+                    "2022-01-20",
+                    "15:04:12",
+                    "",
+                    "",
+                    ""
+                });
+}
+
+QStringList DbManager::prepareValues(const QStringList &fieldsData, const QStringList& values)
+{
+    QString valuesStr;
+    QStringList fieldsStrLst, valuesStrLst, curFieldList;
+    for(int i = 0; i < fieldsData.size(); i++) {
+        curFieldList = fieldsData.at(i).split(" ");
+        valuesStr = values.at(i);
+        if(curFieldList[FIELD_TYPE].contains("text")
+                || curFieldList[FIELD_TYPE].contains("varchar")) {
+            valuesStr = "'" + valuesStr + "'";
+        }
+        fieldsStrLst.append(curFieldList[FIELD_NAME]);
+        valuesStrLst.append(valuesStr);
+    }
+    return QStringList({fieldsStrLst.join(", "), valuesStrLst.join(", ")});
+}
