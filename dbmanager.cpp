@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QTime>
+#include <QDate>
 #include <QDebug>
 
 DbManager::DbManager()
@@ -106,15 +108,13 @@ bool DbManager::createDirPath(QString dirPath)
 
 bool DbManager::createDayRecord()
 {
-    return createRecord("tracks", m_slTracksFields,
-                {
-                    "NULL",
-                    "2022-01-20",
-                    "15:04:12",
-                    "",
-                    "",
-                    ""
-                });
+    QTime tm = QTime::currentTime();
+    QDate dt = QDate::currentDate();
+    QStringList newRec = {"NULL",
+                            dt.toString("yyyy-MM-dd"),
+                            tm.toString("hh:mm:ss"),
+                            "", "", "" };
+    return createRecord("tracks", m_slTracksFields, newRec);
 }
 
 QStringList DbManager::prepareValues(const QStringList &fieldsData, const QStringList& values)
