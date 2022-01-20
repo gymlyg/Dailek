@@ -25,7 +25,9 @@ bool DbManager::init_db()
                 + QDir::separator() + "db"
                 + QDir::separator() + m_sDbName;
         qDebug() << dbPath;
-        return true;
+        m_db = QSqlDatabase::addDatabase("QSQLITE");
+        m_db.setDatabaseName(dbPath);
+        return m_db.open();
     }
     return false;
 }
