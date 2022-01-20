@@ -34,6 +34,8 @@ bool MainWindow::init()
     return true;
 }
 
-void MainWindow::on_pushButton_addNew_clicked() {
+void MainWindow::on_pushButton_addNew_clicked()
+{
     m_dbManager.createDayRecord();
+    m_pTrackSqlModel->selQuery();
 }
