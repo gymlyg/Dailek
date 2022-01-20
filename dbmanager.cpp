@@ -1,6 +1,8 @@
 #include "dbmanager.h"
 #include <QStringList>
 #include <QStandardPaths>
+#include <QDir>
+#include <QDebug>
 
 DbManager::DbManager()
 {
@@ -9,13 +11,21 @@ DbManager::DbManager()
 
 bool DbManager::init()
 {
-    return true;
+    return init_db();
 }
 
 bool DbManager::init_db()
 {
     QStringList locations = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
-    QStringList appDataSubDirs;
-    appDataSubDirs.append("db");
-    QString db_path = locations[0] + "/db/" + m_sDbName;
+    QString dbPath;
+
+    if(locations.size() > 0) {
+        dbPath = QDir::toNativeSeparators(locations[0]);
+        dbPath = dbPath
+                + QDir::separator() + "db"
+                + QDir::separator() + m_sDbName;
+        qDebug() << dbPath;
+        return true;
+    }
+    return false;
 }
