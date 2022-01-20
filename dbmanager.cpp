@@ -87,9 +87,12 @@ bool DbManager::createRecord(const QString tableName, const QStringList &fieldsD
 
 bool DbManager::createFileByPath(QString dbFilePath)
 {
+    bool rez = true;
     QFile dbFile(dbFilePath);
-    bool rez = dbFile.open(QIODevice::WriteOnly);
-    dbFile.close();
+    if(!dbFile.exists()) {
+        rez = dbFile.open(QIODevice::WriteOnly);
+        dbFile.close();
+    }
     return rez;
 }
 
