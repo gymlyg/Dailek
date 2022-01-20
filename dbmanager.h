@@ -13,6 +13,8 @@ public:
     DbManager();
     bool init();
     bool init_db();
+    bool createDbStructure();
+    bool createTable(const QString tableName, const QStringList &fieldsData);
     bool createFileByPath( QString dbFilePath);
     bool createDirPath(QString dirPath);
 };

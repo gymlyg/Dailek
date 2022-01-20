@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QFile>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QDebug>
 
 DbManager::DbManager()
@@ -13,7 +14,7 @@ DbManager::DbManager()
 
 bool DbManager::init()
 {
-    return init_db();
+    return init_db() && createDbStructure();
 }
 
 bool DbManager::init_db()
@@ -43,6 +44,35 @@ bool DbManager::init_db()
         qDebug() << "db file cannot be created!";
     }
     return false;
+}
+
+bool DbManager::createDbStructure()
+{
+    bool r = true;
+    qDebug() << "createTable tracks: " << createTable("tracks",
+                    {
+                        "id integer primary key AUTOINCREMENT",
+                        "date_current_day varchar(16)",
+                        "time_start varchar(16)",
+                        "time_end varchar(16)",
+                        "task_target varchar(64)",
+                        "task_desc varchar(128)"
+                     });
+    return r;
+}
+
+bool DbManager::createTable(const QString tableName, const QStringList &fieldsData)
+{
+    QSqlQuery query;
+    QString qStr = "CREATE TABLE IF NOT EXISTS %1(%2)";
+    qStr = qStr.arg(tableName).arg(fieldsData.join(","));
+    qDebug() << "query: " << qStr;
+    bool r = query.exec(qStr);
+    if(!r) {
+        QSqlError err = query.lastError();
+        qDebug() << "creating table error: " << err.text();
+    }
+    return r;
 }
 
 bool DbManager::createFileByPath(QString dbFilePath)
