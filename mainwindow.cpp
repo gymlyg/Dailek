@@ -36,6 +36,7 @@ bool MainWindow::init()
 
 void MainWindow::on_pushButton_addNew_clicked()
 {
+    m_dbManager.updateLastRecordTM();
     m_dbManager.createDayRecord();
     m_pTrackSqlModel->selQuery();
 }

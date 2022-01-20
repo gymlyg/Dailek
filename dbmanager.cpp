@@ -119,6 +119,16 @@ bool DbManager::createDayRecord()
     return createRecord("tracks", m_slTracksFields, newRec);
 }
 
+bool DbManager::updateLastRecordTM()
+{
+    QSqlQuery q;
+    qint64 dtmInt = QDateTime::currentDateTime().toSecsSinceEpoch();
+    QString qStr = "UPDATE %1 set time_end = %2 WHERE id = (SELECT id FROM %1 ORDER BY id DESC LIMIT 1)";
+    qDebug() << "last tm update query: " << qStr;
+    qStr = qStr.arg("tracks").arg(dtmInt);
+    return q.exec(qStr);
+}
+
 QStringList DbManager::prepareValues(const QStringList &fieldsData, const QVariantList& values)
 {
     QString valuesStr;

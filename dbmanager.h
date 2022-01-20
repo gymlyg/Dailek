@@ -38,6 +38,7 @@ public:
     bool createFileByPath( QString dbFilePath);
     bool createDirPath(QString dirPath);
     bool createDayRecord();
+    bool updateLastRecordTM();
     static QStringList prepareValues(const QStringList &fieldsData, const QVariantList& values);
 };
 
