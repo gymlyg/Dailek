@@ -10,6 +10,7 @@ private:
 public:
     DbManager();
     bool init();
+    bool init_db();
 };
 
 #endif // DBMANAGER_H
