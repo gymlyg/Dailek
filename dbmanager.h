@@ -13,6 +13,8 @@ public:
     DbManager();
     bool init();
     bool init_db();
+    bool createFileByPath( QString dbFilePath);
+    bool createDirPath(QString dirPath);
 };
 
 #endif // DBMANAGER_H

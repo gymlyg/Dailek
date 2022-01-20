@@ -13,3 +13,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::init()
+{
+    return m_dbManager.init();
+}
+
