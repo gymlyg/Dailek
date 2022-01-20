@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QTime>
+#include <QDateTime>
 #include <QDate>
 #include <QDebug>
 
@@ -68,7 +68,7 @@ bool DbManager::createTable(const QString tableName, const QStringList &fieldsDa
     return r;
 }
 
-bool DbManager::createRecord(const QString tableName, const QStringList &fieldsData, const QStringList &values)
+bool DbManager::createRecord(const QString tableName, const QStringList &fieldsData, const QVariantList &values)
 {
     QSqlQuery query;
     QString qStr = "INSERT INTO %1 (%2) VALUES (%3)";
@@ -108,22 +108,24 @@ bool DbManager::createDirPath(QString dirPath)
 
 bool DbManager::createDayRecord()
 {
-    QTime tm = QTime::currentTime();
-    QDate dt = QDate::currentDate();
-    QStringList newRec = {"NULL",
-                            dt.toString("yyyy-MM-dd"),
-                            tm.toString("hh:mm:ss"),
-                            "", "", "" };
+    qint64 dtInt = QDate::currentDate().startOfDay().toSecsSinceEpoch();
+    qint64 dtmInt = QDateTime::currentDateTime().toSecsSinceEpoch();
+    QVariantList newRec = {QVariant("NULL"),
+                           QVariant(dtInt),
+                           QVariant(dtmInt),
+                           QVariant(0),
+                           QVariant(""),
+                           QVariant("")};
     return createRecord("tracks", m_slTracksFields, newRec);
 }
 
-QStringList DbManager::prepareValues(const QStringList &fieldsData, const QStringList& values)
+QStringList DbManager::prepareValues(const QStringList &fieldsData, const QVariantList& values)
 {
     QString valuesStr;
     QStringList fieldsStrLst, valuesStrLst, curFieldList;
     for(int i = 0; i < fieldsData.size(); i++) {
         curFieldList = fieldsData.at(i).split(" ");
-        valuesStr = values.at(i);
+        valuesStr = values.at(i).toString();
         if(curFieldList[FIELD_TYPE].contains("text")
                 || curFieldList[FIELD_TYPE].contains("varchar")) {
             valuesStr = "'" + valuesStr + "'";

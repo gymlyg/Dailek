@@ -2,15 +2,16 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QDate>
+#include <QDateTime>
 #include <QDebug>
 
 TrackSqlModel::TrackSqlModel(QObject *parent) : QSqlQueryModel(parent)
 {
     QDate dt = QDate::currentDate();
-    QString query = "select id, time_start, time_end, task_target, task_desc from tracks where date_current_day = '%1'";
-    qDebug() << "sel q:" << query.arg(dt.toString("yyyy-MM-dd"));
-    setSelQuery(query.arg(dt.toString("yyyy-MM-dd")));
+    QString query = "select id, time_start, time_end, (time_end - time_start) as delta, task_target, task_desc from tracks where date_current_day = %1";
+    query = query.arg(dt.startOfDay().toSecsSinceEpoch());
+    qDebug() << "sel q:" << query;
+    setSelQuery(query);
 }
 
 bool TrackSqlModel::setData(const QModelIndex &index, const QVariant &value, int nRole)
@@ -35,7 +36,7 @@ bool TrackSqlModel::setData(const QModelIndex &index, const QVariant &value, int
             emit dataChanged(index, index);
         } else {
             QSqlError sr = q.lastError();
-            qDebug() << "srr:" << sr.text();
+            qDebug() << "err:" << sr.text();
         }
     }
     return rez;
