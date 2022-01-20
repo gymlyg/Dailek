@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "dbmanager.h"
+#include "tracksqlmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,5 +23,6 @@ public slots:
 private:
     Ui::MainWindow *ui;
     DbManager m_dbManager;
+    TrackSqlModel *m_pTrackSqlModel;
 };
 #endif // MAINWINDOW_H

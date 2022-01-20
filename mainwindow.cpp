@@ -15,7 +15,12 @@ MainWindow::~MainWindow()
 
 bool MainWindow::init()
 {
-    return m_dbManager.init();
+    m_dbManager.init();
+    m_pTrackSqlModel = new TrackSqlModel();
+    m_pTrackSqlModel->selQuery();
+    ui->tableView_day_tracks->setModel(m_pTrackSqlModel);
+    ui->tableView_day_tracks->show();
+    return true;
 }
 
 void MainWindow::on_pushButton_addNew_clicked() {

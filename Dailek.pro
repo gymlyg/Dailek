@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     dbmanager.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    tracksqlmodel.cpp
 
 HEADERS += \
     dbmanager.h \
-    mainwindow.h
+    mainwindow.h \
+    tracksqlmodel.h
 
 FORMS += \
     mainwindow.ui
