@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -36,7 +37,17 @@ bool MainWindow::init()
 
 void MainWindow::on_pushButton_addNew_clicked()
 {
+    QStringList statData;
+    QString statMsg;
     m_dbManager.updateLastRecordTM();
     m_dbManager.createDayRecord();
     m_pTrackSqlModel->selQuery();
+    m_dbManager.updateStatistics(statData);
+    if(statData.size() > 0) {
+        qDebug() << "statData: " << statData;
+        statMsg = "Среднее за день: %1";
+        statMsg = statMsg.arg(statData[0]);
+        statusBar()->showMessage(statMsg);
+    }
+
 }

@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QDateTime>
 #include <QDate>
 #include <QDebug>
@@ -127,6 +128,30 @@ bool DbManager::updateLastRecordTM()
     qDebug() << "last tm update query: " << qStr;
     qStr = qStr.arg("tracks").arg(dtmInt);
     return q.exec(qStr);
+}
+
+bool DbManager::updateStatistics(QStringList &statData)
+{
+    bool rez = false;
+    QSqlQuery query;
+    QDate dt = QDate::currentDate();
+    QString qStr = "select sum(time_end - time_start) from tracks where date_current_day = %1";
+    qStr = qStr.arg(dt.startOfDay().toSecsSinceEpoch());
+    qDebug() << qStr;
+    rez = query.exec(qStr);
+    if(rez) {
+        QSqlRecord record = query.record();
+        query.next();
+        qDebug() << record << ", amount: " << record.count();
+        for(int i = 0; i < record.count(); i++) {
+            statData.append(query.value(i).toString());
+            qDebug() << "append " << query.value(i).toString();
+        }
+    } else {
+        QSqlError err = query.lastError();
+        qDebug() << "update statistics error: " << err.text();
+    }
+    return rez;
 }
 
 QStringList DbManager::prepareValues(const QStringList &fieldsData, const QVariantList& values)

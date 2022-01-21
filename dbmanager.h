@@ -39,6 +39,7 @@ public:
     bool createDirPath(QString dirPath);
     bool createDayRecord();
     bool updateLastRecordTM();
+    bool updateStatistics(QStringList &statData);
     static QStringList prepareValues(const QStringList &fieldsData, const QVariantList& values);
 };
 
