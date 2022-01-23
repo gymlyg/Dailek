@@ -24,8 +24,8 @@ bool TrackSqlModel::setData(const QModelIndex &index, const QVariant &value, int
     if(index.isValid() && Qt::EditRole == nRole) {
         id = index.siblingAtColumn(0).data(Qt::EditRole).toInt();
         column = index.column();
-        if(1 == column) {
-            str = QString("update tasks set title='%1' where id=%2").arg(value.toString()).arg(id);
+        if(5 == column) {
+            str = QString("update tracks set task_desc='%1' where id=%2").arg(value.toString()).arg(id);
             rez = q.exec(str);
         } else if (2 == column) {
             str = QString("update tasks set amount=%1 where id=%2").arg(value.toInt()).arg(id);
