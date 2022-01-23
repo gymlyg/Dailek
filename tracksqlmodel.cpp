@@ -8,8 +8,9 @@
 TrackSqlModel::TrackSqlModel(QObject *parent) : QSqlQueryModel(parent)
 {
     QDate dt = QDate::currentDate();
-    QString query = "select id, time_start, time_end, (time_end - time_start) as delta, task_target, task_desc from tracks where date_current_day = %1";
-    query = query.arg(dt.startOfDay().toSecsSinceEpoch());
+    QString deltaField = "CASE WHEN (time_end - time_start) <= 0 THEN 0 ELSE (time_end - time_start) END";
+    QString query = "select id, time_start, time_end, %1, task_target, task_desc from tracks where date_current_day = %2";
+    query = query.arg(deltaField).arg(dt.startOfDay().toSecsSinceEpoch());
     qDebug() << "sel q:" << query;
     setSelQuery(query);
 }
