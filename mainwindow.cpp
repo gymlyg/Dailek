@@ -16,7 +16,8 @@ MainWindow::~MainWindow()
 
 bool MainWindow::init()
 {
-    m_dbManager.init();
+    m_dbManager.init_db();
+    m_dbTracks.init();
     m_pTrackSqlModel = new TrackSqlModel();
     m_pTrackSqlModel->selQuery();
     ui->tableView_day_tracks->setModel(m_pTrackSqlModel);
@@ -39,10 +40,10 @@ void MainWindow::on_pushButton_addNew_clicked()
 {
     QStringList statData;
     QString statMsg;
-    m_dbManager.updateLastRecordTM();
-    m_dbManager.createDayRecord();
+    m_dbTracks.updateLastRecordTM();
+    m_dbTracks.createDayRecord();
     m_pTrackSqlModel->selQuery();
-    m_dbManager.updateStatistics(statData);
+    m_dbTracks.updateStatistics(statData);
     if(statData.size() > 0) {
         qDebug() << "statData: " << statData;
         statMsg = "Среднее за день: %1";

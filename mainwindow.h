@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "dbmanager.h"
 #include "tracksqlmodel.h"
+#include "dbtracks.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,5 +25,6 @@ private:
     Ui::MainWindow *ui;
     DbManager m_dbManager;
     TrackSqlModel *m_pTrackSqlModel;
+    DbTracks m_dbTracks;
 };
 #endif // MAINWINDOW_H
