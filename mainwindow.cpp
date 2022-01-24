@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
+#include "tracksdelegate.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,12 +21,15 @@ bool MainWindow::init()
     m_dbTracks.init();
     m_pTrackSqlModel = new TrackSqlModel();
     m_pTrackSqlModel->selQuery();
+
+    ui->tableView_day_tracks->setItemDelegate(new TracksDelegate());
     ui->tableView_day_tracks->setModel(m_pTrackSqlModel);
 
-    m_pTrackSqlModel->setHeaderData(1, Qt::Horizontal, tr("col 1"));
-    m_pTrackSqlModel->setHeaderData(2, Qt::Horizontal, tr("col 2"));
-    m_pTrackSqlModel->setHeaderData(3, Qt::Horizontal, tr("col 3"));
-    m_pTrackSqlModel->setHeaderData(4, Qt::Horizontal, tr("col 4"));
+    m_pTrackSqlModel->setHeaderData(1, Qt::Horizontal, tr("От"));
+    m_pTrackSqlModel->setHeaderData(2, Qt::Horizontal, tr("До"));
+    m_pTrackSqlModel->setHeaderData(3, Qt::Horizontal, tr("Период"));
+    m_pTrackSqlModel->setHeaderData(4, Qt::Horizontal, tr("Тип"));
+    m_pTrackSqlModel->setHeaderData(5, Qt::Horizontal, tr("Описание"));
 
     ui->tableView_day_tracks->hideColumn(0);
     ui->tableView_day_tracks->horizontalHeader()->setStretchLastSection(true);

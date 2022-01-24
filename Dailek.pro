@@ -14,6 +14,7 @@ SOURCES += \
     dbtracks.cpp \
     main.cpp \
     mainwindow.cpp \
+    tracksdelegate.cpp \
     tracksqlmodel.cpp
 
 HEADERS += \
@@ -21,6 +22,7 @@ HEADERS += \
     dbtable.h \
     dbtracks.h \
     mainwindow.h \
+    tracksdelegate.h \
     tracksqlmodel.h
 
 FORMS += \
