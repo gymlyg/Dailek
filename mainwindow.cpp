@@ -37,22 +37,26 @@ bool MainWindow::init()
     ui->tableView_day_tracks->resizeColumnToContents(true);
 
     ui->tableView_day_tracks->show();
+    displayStatistics();
     return true;
+}
+
+void MainWindow::displayStatistics()
+{
+    QStringList statData;
+    QString statMsg;
+    m_dbTracks.updateStatistics(statData);
+    if(statData.size() > 0) {
+        qDebug() << "statData: " << statData;
+        statMsg = QString("За день: %1").arg(statData.join("; "));
+        statusBar()->showMessage(statMsg);
+    }
 }
 
 void MainWindow::on_pushButton_addNew_clicked()
 {
-    QStringList statData;
-    QString statMsg;
     m_dbTracks.updateLastRecordTM();
     m_dbTracks.createDayRecord();
     m_pTrackSqlModel->selQuery();
-    m_dbTracks.updateStatistics(statData);
-    if(statData.size() > 0) {
-        qDebug() << "statData: " << statData;
-        statMsg = "Среднее за день: %1";
-        statMsg = statMsg.arg(statData[0]);
-        statusBar()->showMessage(statMsg);
-    }
-
+    displayStatistics();
 }

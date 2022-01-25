@@ -18,6 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     bool init();
+    void displayStatistics();
 
 public slots:
     void on_pushButton_addNew_clicked();

@@ -34,21 +34,26 @@ bool DbTracks::updateStatistics(QStringList &statData)
     bool rez = false;
     QSqlQuery query;
     QDate dt = QDate::currentDate();
-    QString qStr = "select sum(time_end - time_start) from %1 where date_current_day = %2 and (time_end <> 0 or time_end <> NULL)";
+    QString qStr = "select task_target, sum(time_end - time_start) from %1 where date_current_day = %2 and (time_end <> 0 or time_end <> NULL) group by task_target";
     qStr = qStr.arg(m_sTableName).arg(dt.startOfDay().toSecsSinceEpoch());
     qDebug() << qStr;
     rez = query.exec(qStr);
     if(rez) {
         QSqlRecord record = query.record();
-        query.next();
-        qDebug() << record << ", amount: " << record.count();
-        for(int i = 0; i < record.count(); i++) {
-            int c = query.value(i).toInt();
-            int h = c / 3600;
-            int m = c % 3600 / 60;
-            QString dateString = QString("%1:%2").arg(h, 4, 'g', -1, '0').arg(m, 2, 'g', -1, '0');
-            statData.append(dateString);
-            qDebug() << "append " << query.value(i).toString();
+        while(query.next()) {
+            qDebug() << record << ", amount: " << record;
+            if(record.count() > 1) {
+                QString taskName = query.value(0).toString();
+                int c = query.value(1).toInt();
+                int h = c / 3600;
+                int m = c % 3600 / 60;
+                QString dateString = QString("%1 - %2:%3")
+                        .arg(taskName)
+                        .arg(h, 2, 'g', -1, '0')
+                        .arg(m, 2, 'g', -1, '0');
+                statData.append(dateString);
+                qDebug() << "append " << dateString;
+            }
         }
     } else {
         QSqlError err = query.lastError();
