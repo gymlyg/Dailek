@@ -2,8 +2,6 @@
 
 #include <QApplication>
 #include <QStyledItemDelegate>
-#include <QStylePainter>
-#include <QStyleOptionComplex>
 #include <QDateTime>
 #include <QTime>
 #include <QDebug>
