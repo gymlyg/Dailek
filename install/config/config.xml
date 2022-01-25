@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Dailek</Name>
+    <Version>1.0.1</Version>
+    <Title>Dailek time tracker</Title>
+    <Publisher>gymlyg</Publisher>
+    <StartMenuDir>Dailek</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/Dailek</TargetDir>
+</Installer>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Dailek</DisplayName>
+    <Description>Time track tool</Description>
+    <Description xml:lang="ru_RU">Программа для учёта времени</Description>
+    <Version>1.0.1</Version>
+    <ReleaseDate>2022-01-24</ReleaseDate>
+    <Default>true</Default>
+    <Name>ru.gymlyg.root</Name>
+    <Licenses>
+        <License name="License Agreement" file="license.txt" />
+    </Licenses>
+    <Default>script</Default>
+    <Script>installscript.qs</Script>
+    <ForcedInstallation>true</ForcedInstallation>
+</Package>
