@@ -1,12 +1,15 @@
 #include "mainwindow.h"
 
-#include <QApplication>
+#include "qtsingleapplication.h"
 #include <QLocale>
 #include <QTranslator>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QtSingleApplication a(argc, argv);
+
+    if (a.isRunning())
+             return !a.sendMessage("It is running!");
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -18,6 +21,7 @@ int main(int argc, char *argv[])
         }
     }
     MainWindow w;
+    a.setActivationWindow(&w);
     if(w.init()) {
         w.show();
         return a.exec();
