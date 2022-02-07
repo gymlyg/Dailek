@@ -13,6 +13,8 @@ rm -f config.pri
 if [ "x$1" = "x-library" ]; then
     echo "Configuring to build this component as a dynamic library."
     echo "SOLUTIONS_LIBRARY = yes" > config.pri
+else
+    echo "SOLUTIONS_LIBRARY = no" > config.pri
 fi
 
 echo
