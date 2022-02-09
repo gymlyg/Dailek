@@ -57,6 +57,7 @@ void MainWindow::on_pushButton_addNew_clicked()
 {
     m_dbTracks.updateLastRecordTM();
     m_dbTracks.createDayRecord();
+    m_pTrackSqlModel->setTodaySelQuery();
     m_pTrackSqlModel->selQuery();
     displayStatistics();
 }

@@ -8,7 +8,8 @@ class TrackSqlModel : public QSqlQueryModel
     Q_OBJECT
 public:
     explicit TrackSqlModel(QObject *parent = nullptr);
-    void setSelQuery(QString query);
+    void setSelQuery(QDate &dt);
+    void setTodaySelQuery();
     void selQuery();
 private:
     QString m_sSelQuery;

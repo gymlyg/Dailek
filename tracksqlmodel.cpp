@@ -7,12 +7,7 @@
 
 TrackSqlModel::TrackSqlModel(QObject *parent) : QSqlQueryModel(parent)
 {
-    QDate dt = QDate::currentDate();
-    QString deltaField = "CASE WHEN (time_end - time_start) <= 0 THEN 0 ELSE (time_end - time_start) END";
-    QString query = "select id, time_start, time_end, %1, task_target, task_desc from tracks where date_current_day = %2";
-    query = query.arg(deltaField).arg(dt.startOfDay().toSecsSinceEpoch());
-    qDebug() << "sel q:" << query;
-    setSelQuery(query);
+    setTodaySelQuery();
 }
 
 bool TrackSqlModel::setData(const QModelIndex &index, const QVariant &value, int nRole)
@@ -51,9 +46,19 @@ Qt::ItemFlags TrackSqlModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-void TrackSqlModel::setSelQuery(QString query)
+void TrackSqlModel::setSelQuery(QDate &dt)
 {
+    QString deltaField = "CASE WHEN (time_end - time_start) <= 0 THEN 0 ELSE (time_end - time_start) END";
+    QString query = "select id, time_start, time_end, %1, task_target, task_desc from tracks where date_current_day = %2";
+    query = query.arg(deltaField).arg(dt.startOfDay().toSecsSinceEpoch());
+    qDebug() << "sel q:" << query;
     m_sSelQuery = query;
+}
+
+void TrackSqlModel::setTodaySelQuery()
+{
+    QDate dt = QDate::currentDate();
+    setSelQuery(dt);
 }
 
 void TrackSqlModel::selQuery()
