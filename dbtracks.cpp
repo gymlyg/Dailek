@@ -10,7 +10,6 @@ DbTracks::DbTracks():DbTable(
     "tracks",
     {
         "id integer primary key AUTOINCREMENT",
-        "date_current_day integer",
         "time_start integer",
         "time_end integer",
         "task_target varchar(64)",
@@ -37,7 +36,6 @@ bool DbTracks::updateLastRecordTM()
 
                 if(taskSt < iStDayDt) {
                     QVariantList newRec = {QVariant("NULL"),
-                                           QVariant(0),
                                            QVariant(iStDayDt),
                                            QVariant(iCurDtTm),
                                            QVariant(taskType),
@@ -62,7 +60,7 @@ bool DbTracks::updateStatistics(QStringList &statData)
     bool rez = false;
     QSqlQuery query;
     QDate dt = QDate::currentDate();
-    QString qStr = "select task_target, sum(time_end - time_start) from %1 where date_current_day = %2 and (time_end <> 0 or time_end <> NULL) group by task_target";
+    QString qStr = "select task_target, sum(time_end - time_start) from %1 where true and (time_end <> 0 or time_end <> NULL) group by task_target";
     qStr = qStr.arg(m_sTableName).arg(dt.startOfDay().toSecsSinceEpoch());
     qDebug() << qStr;
     rez = query.exec(qStr);
@@ -92,10 +90,9 @@ bool DbTracks::updateStatistics(QStringList &statData)
 
 bool DbTracks::createDayRecord()
 {
-    qint64 dtInt = QDate::currentDate().startOfDay().toSecsSinceEpoch();
+    //qint64 dtInt = QDate::currentDate().startOfDay().toSecsSinceEpoch();
     qint64 dtmInt = QDateTime::currentDateTime().toSecsSinceEpoch();
     QVariantList newRec = {QVariant("NULL"),
-                           QVariant(dtInt),
                            QVariant(dtmInt),
                            QVariant(0),
                            QVariant(""),

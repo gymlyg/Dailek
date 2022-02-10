@@ -49,8 +49,8 @@ Qt::ItemFlags TrackSqlModel::flags(const QModelIndex &index) const
 void TrackSqlModel::setSelQuery(QDate &dt)
 {
     QString deltaField = "CASE WHEN (time_end - time_start) <= 0 THEN 0 ELSE (time_end - time_start) END";
-    QString query = "select id, time_start, time_end, %1, task_target, task_desc from tracks where date_current_day = %2";
-    query = query.arg(deltaField).arg(dt.startOfDay().toSecsSinceEpoch());
+    QString query = "select id, time_start, time_end, %1, task_target, task_desc from tracks where true";
+    query = query.arg(deltaField);
     qDebug() << "sel q:" << query;
     m_sSelQuery = query;
 }
