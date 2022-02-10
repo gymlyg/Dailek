@@ -23,32 +23,34 @@ bool DbTracks::updateLastRecordTM()
     QSqlQuery query;
     qint64 iCurDtTm = QDateTime::currentDateTime().toSecsSinceEpoch();
     qint64 iStDayDt = QDate::currentDate().startOfDay().toSecsSinceEpoch();
-    //QString qStr = "UPDATE %1 set time_end = %2 WHERE id = (SELECT id FROM %1 ORDER BY id DESC LIMIT 1)";
     QString lastRecord = "SELECT * FROM %1 ORDER BY id DESC LIMIT 1";
+    lastRecord = lastRecord.arg(m_sTableName);
     if(query.exec(lastRecord)) {
-        QSqlRecord record = query.record();
-        if(query.next()) {
-            if(record.count() > 4) {
-                int taskId = query.value(0).toInt();
-                int taskSt = query.value(1).toInt();
-                QString taskType = query.value(2).toString();
-                QString taskDesc = query.value(3).toString();
+        if(query.first()) {
+            QSqlRecord record = query.record();
+            qDebug() << "last rec:" << record;
+            if(record.count() >= 5) {
+                int taskId = record.value(0).toInt();
+                int taskSt = record.value(1).toInt();
+                QString taskType = record.value(3).toString();
+                QString taskDesc = record.value(4).toString();
+                if(taskId > 0 && taskSt > 0) {
+                    if(taskSt < iStDayDt) {
+                        QVariantList newRec = {QVariant("NULL"),
+                                               QVariant(iStDayDt),
+                                               QVariant(iCurDtTm),
+                                               QVariant(taskType),
+                                               QVariant(taskDesc)};
+                        qDebug() << " create new day part: " << newRec;
+                        if(!createRecord(newRec))
+                            return false;
+                    }
 
-                if(taskSt < iStDayDt) {
-                    QVariantList newRec = {QVariant("NULL"),
-                                           QVariant(iStDayDt),
-                                           QVariant(iCurDtTm),
-                                           QVariant(taskType),
-                                           QVariant(taskDesc)};
-                    qDebug()<<" create new day part: " << newRec;
-                    if(!createRecord(newRec))
-                        return false;
+                    lastRecord = "UPDATE %1 set time_end = %2 WHERE id = %3";
+                    lastRecord = lastRecord.arg(m_sTableName).arg(iCurDtTm).arg(taskId);
+                    qDebug() << "last tm update query: " << lastRecord;
+                    return  query.exec(lastRecord);
                 }
-
-                lastRecord = "UPDATE %1 set time_end = %2 WHERE id = %3";
-                lastRecord = lastRecord.arg(m_sTableName, iStDayDt, taskId);
-                qDebug() << "last tm update query: " << lastRecord;
-                return  query.exec(lastRecord);
             }
         }
     }
@@ -90,7 +92,6 @@ bool DbTracks::updateStatistics(QStringList &statData)
 
 bool DbTracks::createDayRecord()
 {
-    //qint64 dtInt = QDate::currentDate().startOfDay().toSecsSinceEpoch();
     qint64 dtmInt = QDateTime::currentDateTime().toSecsSinceEpoch();
     QVariantList newRec = {QVariant("NULL"),
                            QVariant(dtmInt),
