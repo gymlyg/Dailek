@@ -4,6 +4,7 @@
 #include <QSqlQuery>
 #include <QDateTime>
 #include <QDebug>
+#include"dbtracks.h"
 
 TrackSqlModel::TrackSqlModel(QObject *parent) : QSqlQueryModel(parent)
 {
@@ -49,7 +50,7 @@ Qt::ItemFlags TrackSqlModel::flags(const QModelIndex &index) const
 void TrackSqlModel::setSelQuery(QDate &dt)
 {
     qint64 iCurDtTm = dt.startOfDay().toSecsSinceEpoch();
-    qint64 iCurDayEnd = iCurDtTm + ONE_DAY_TOTAL_SECONDS;
+    qint64 iCurDayEnd = iCurDtTm + DbTracks::ONE_DAY_TOTAL_SECONDS;
 
     QString query = "select id, time_start, time_end, %1, task_target, task_desc from tracks where %2";
     QString deltaField = "CASE WHEN (time_end - time_start) <= 0 THEN 0 ELSE (time_end - time_start) END";

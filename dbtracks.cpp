@@ -36,14 +36,22 @@ bool DbTracks::updateLastRecordTM()
                 QString taskDesc = record.value(4).toString();
                 if(taskId > 0 && taskSt > 0) {
                     if(taskSt < iStDayDt) {
-                        QVariantList newRec = {QVariant("NULL"),
-                                               QVariant(iStDayDt),
-                                               QVariant(iCurDtTm),
-                                               QVariant(taskType),
-                                               QVariant(taskDesc)};
-                        qDebug() << " create new day part: " << newRec;
-                        if(!createRecord(newRec))
-                            return false;
+                        int deltaEnd = iCurDtTm;
+                        int deltaSt = iStDayDt;
+                        while( deltaSt >= taskSt) {
+                            qDebug() << "[DELTA] " << deltaSt << deltaEnd;
+                            qDebug() << "while rez: " << deltaSt % taskSt;
+                            QVariantList newRec = {QVariant("NULL"),
+                                                   QVariant(deltaSt),
+                                                   QVariant(deltaEnd),
+                                                   QVariant(taskType),
+                                                   QVariant(taskDesc)};
+                            qDebug() << " create new day part: " << newRec;
+                            if(!createRecord(newRec))
+                                return false;
+                            deltaEnd = deltaSt;
+                            deltaSt = deltaEnd - ONE_DAY_TOTAL_SECONDS;
+                        }
                     }
 
                     lastRecord = "UPDATE %1 set time_end = %2 WHERE id = %3";
