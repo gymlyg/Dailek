@@ -3,8 +3,8 @@
     <DisplayName>Dailek</DisplayName>
     <Description>Time track tool</Description>
     <Description xml:lang="ru_RU">Программа для учёта времени</Description>
-    <Version>1.0.1</Version>
-    <ReleaseDate>2022-01-24</ReleaseDate>
+    <Version>1.0.2</Version>
+    <ReleaseDate>2022-02-11</ReleaseDate>
     <Default>true</Default>
     <Name>ru.gymlyg.root</Name>
     <Licenses>
