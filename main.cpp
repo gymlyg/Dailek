@@ -7,7 +7,9 @@
 int main(int argc, char *argv[])
 {
     QtSingleApplication a(argc, argv);
-
+    a.setApplicationName("Dailek");
+    a.setApplicationDisplayName("Dailek");
+    a.setApplicationVersion("1.0.2");
     if (a.isRunning())
              return !a.sendMessage("It is running!");
 
