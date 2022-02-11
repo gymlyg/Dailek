@@ -70,7 +70,7 @@ bool DbTracks::updateStatistics(QStringList &statData)
     bool rez = false;
     QSqlQuery query;
     QDate dt = QDate::currentDate();
-    QString qStr = "select task_target, sum(time_end - time_start) from %1 where time_start >= %2 and (time_end <> 0 or time_end <> NULL) group by task_target";
+    QString qStr = "select task_target, sum(time_end - time_start) from %1 where time_start >= %2 and (time_end <> 0 or time_end <> NULL) group by task_target order by task_target";
     qStr = qStr.arg(m_sTableName).arg(dt.startOfDay().toSecsSinceEpoch());
     qDebug() << qStr;
     rez = query.exec(qStr);
