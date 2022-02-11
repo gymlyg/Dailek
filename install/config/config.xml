@@ -6,4 +6,5 @@
     <Publisher>gymlyg</Publisher>
     <StartMenuDir>Dailek</StartMenuDir>
     <TargetDir>@ApplicationsDirX64@/Dailek</TargetDir>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
 </Installer>
