@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
-        const QString baseName = "Dailek_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
+        const QString baseName = "Dailek_" + QLocale(locale).name() + ".qm";
+        if (translator.load(baseName)) {
             a.installTranslator(&translator);
             break;
         }

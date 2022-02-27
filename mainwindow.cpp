@@ -25,11 +25,11 @@ bool MainWindow::init()
     ui->tableView_day_tracks->setItemDelegate(new TracksDelegate());
     ui->tableView_day_tracks->setModel(m_pTrackSqlModel);
 
-    m_pTrackSqlModel->setHeaderData(1, Qt::Horizontal, tr("От"));
-    m_pTrackSqlModel->setHeaderData(2, Qt::Horizontal, tr("До"));
-    m_pTrackSqlModel->setHeaderData(3, Qt::Horizontal, tr("Период"));
-    m_pTrackSqlModel->setHeaderData(4, Qt::Horizontal, tr("Тип"));
-    m_pTrackSqlModel->setHeaderData(5, Qt::Horizontal, tr("Описание"));
+    m_pTrackSqlModel->setHeaderData(1, Qt::Horizontal, tr("From"));
+    m_pTrackSqlModel->setHeaderData(2, Qt::Horizontal, tr("To"));
+    m_pTrackSqlModel->setHeaderData(3, Qt::Horizontal, tr("Period"));
+    m_pTrackSqlModel->setHeaderData(4, Qt::Horizontal, tr("TrackType"));
+    m_pTrackSqlModel->setHeaderData(5, Qt::Horizontal, tr("TrackDesc"));
 
     ui->tableView_day_tracks->hideColumn(0);
     ui->tableView_day_tracks->horizontalHeader()->setStretchLastSection(true);
@@ -48,7 +48,7 @@ void MainWindow::displayStatistics()
     m_dbTracks.updateStatistics(statData);
     if(statData.size() > 0) {
         qDebug() << "statData: " << statData;
-        statMsg = QString("За день: %1").arg(statData.join("; "));
+        statMsg = tr("Per day: %1").arg(statData.join("; "));
         statusBar()->showMessage(statMsg);
     }
 }
